@@ -1,0 +1,29 @@
+{
+  "name": "pro-mern-practice-stack",
+  "version": "1.0.0",
+  "description": "Practice building a webapp using MERN stack",
+  "main": "index.js",
+  "scripts": {
+    "compile": "babel src --presets react,es2015 --out-dir static",
+    "watch": "babel src --presets react,es2015 --out-dir static --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanarvelo/pro-mern-practice-stack.git"
+  },
+  "author": "Leonidas y Alan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alanarvelo/pro-mern-practice-stack/issues"
+  },
+  "homepage": "https://github.com/alanarvelo/pro-mern-practice-stack#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  }
+}
