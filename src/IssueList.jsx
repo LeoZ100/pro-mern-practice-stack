@@ -2,12 +2,18 @@
 
 import React from 'react';
 import 'whatwg-fetch';
+import { Link } from 'react-router';
 import IssueFilter from './IssueFilter.jsx';
 import IssueAdd from './IssueAdd.jsx';
 
+
 const IssueRow = (props) => (
 			<tr>
-				<td>{props.issue._id}</td>
+				<td> 
+					<Link to={`/issues/${props.issue._id}`}>
+					{props.issue._id.substr(-4)}
+					</Link>
+				</td>
 				<td>{props.issue.status}</td>
 				<td>{props.issue.owner}</td>
 				<td>{props.issue.created.toDateString()}</td>
@@ -45,14 +51,29 @@ export default class IssueList extends React.Component {
 		super();
 		this.state = {issues: [] };
 		this.createIssue = this.createIssue.bind(this);
+		this.setFilter = this.setFilter.bind(this);
 	}
 
 	componentDidMount() {
 		this.loadData();
 	}
+	componentDidUpdate(prevProps) {
+		const oldQuery = prevProps.location.query;
+		const newQuery = this.props.location.query;
+		if(oldQuery.status === newQuery.status
+			 && oldQuery.effort_gte === newQuery.effort_gte
+			 && oldQuery.effort_lte === newQuery.effort_lte) {
+			return;
+		}
+		this.loadData();
+	}
+
+	setFilter(query) {
+		this.props.router.push({pathname: this.props.location.pathname, query});
+	}
 
 	loadData() {
-		fetch('/api/issues').then(response => {
+		fetch(`/api/issues${this.props.location.search}`).then(response => {
 			if (response.ok) {
 				response.json().then(data => {
 					console.log("Total count of records:", data._metadata.total_count);
@@ -101,8 +122,8 @@ export default class IssueList extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1> Issue Tracker </h1>
-				<IssueFilter/>
+				<IssueFilter setFilter={this.setFilter}
+				 initFilter={this.props.location.query} />
 				<hr/>
 				<IssueTable issues={this.state.issues} />
 
@@ -112,3 +133,13 @@ export default class IssueList extends React.Component {
 		);
 	}
 } 
+
+IssueList.propTypes = {
+	location: React.PropTypes.object.isRequired,
+	router: React.PropTypes.object,
+}
+
+
+
+
+
